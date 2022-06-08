@@ -64,11 +64,13 @@ def main():
         imputed_mean_dataset = MisVal.impute_mean(copy.deepcopy(dataset), 'hr_watch_rate')       
         imputed_median_dataset = MisVal.impute_median(copy.deepcopy(dataset), 'hr_watch_rate')
         imputed_interpolation_dataset = MisVal.impute_interpolate(copy.deepcopy(dataset), 'hr_watch_rate')
+        imputed_KNN_dataset = MisVal.impute_model_based(copy.deepcopy(dataset), 'hr_watch_rate')
         
-        DataViz.plot_imputed_values(dataset, ['original', 'mean', 'median', 'interpolation'], 'hr_watch_rate',
+        DataViz.plot_imputed_values(dataset, ['original', 'mean', 'median', 'interpolation', 'KNN'], 'hr_watch_rate',
                                     imputed_mean_dataset['hr_watch_rate'], 
                                     imputed_median_dataset['hr_watch_rate'],
-                                    imputed_interpolation_dataset['hr_watch_rate'])
+                                    imputed_interpolation_dataset['hr_watch_rate'],
+                                    imputed_KNN_dataset['hr_watch_rate'])
 
     elif FLAGS.mode == 'kalman':
         # Using the result from Chapter 2, let us try the Kalman filter on the light_phone_lux attribute and study the result.
@@ -178,7 +180,7 @@ def main():
 if __name__ == '__main__':
     # Command line arguments
     parser = argparse.ArgumentParser()
-    parser.add_argument('--mode', type=str, default='final',
+    parser.add_argument('--mode', type=str, default='imputation',
                         help="Select what version to run: final, imputation, lowpass or PCA \
                         'lowpass' applies the lowpass-filter to a single variable \
                         'imputation' is used for the next chapter \

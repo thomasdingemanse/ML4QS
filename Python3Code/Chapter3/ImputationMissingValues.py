@@ -26,3 +26,9 @@ class ImputationMissingValues:
         # And fill the initial data points if needed:
         dataset[col] = dataset[col].fillna(method='bfill')
         return dataset
+
+    def impute_model_based(self, dataset, col):
+        from sklearn.impute import KNNImputer
+        imputer = KNNImputer(n_neighbors=20)
+        dataset[col] = imputer.fit_transform(dataset[[col]]).ravel()
+        return dataset
