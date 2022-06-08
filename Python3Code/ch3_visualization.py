@@ -23,8 +23,7 @@ df = pd.DataFrame(np.arange(0, 1, 0.001), columns=list('X'))
 mean = 0.5
 sd = 0.1
 p = pd.DataFrame(norm.pdf(df,mean,sd), columns=list('p'))
-
-plt.plot(df, p)
+plt.plot(df['X'], p['p'])
 plt.xlabel('$X_{1}$')
 plt.ylabel('$P(X_{1})$')
 ax = plt.gca()
@@ -97,12 +96,12 @@ t = pd.DataFrame(np.arange(0, 16, float(1)/fs), columns=list('X'))
 c1 = 3 * np.sin(2 * math.pi * 0.1 * t)
 c2 = 2 * np.sin(2 * math.pi * t)
 
-plt.plot(t, c1, 'b--')
-plt.plot(t, c2, 'b:')
-plt.plot(t, c1+c2, 'b-')
+plt.plot(t['X'], c1['X'], 'b--')
+plt.plot(t['X'], c2['X'], 'b:')
+plt.plot(t['X'], c1['X']+c2['X'], 'b-')
 LowPass = LowPassFilter()
 new_dataset = LowPass.low_pass_filter(c1+c2, 'X', fs, 0.5, order=3, phase_shift=True)
-plt.plot(t, new_dataset['X_lowpass'], 'r-')
+plt.plot(t['X'], new_dataset['X_lowpass'], 'r-')
 plt.legend(['$3 \cdot sin(2 \cdot \pi \cdot 0.1 \cdot t))$', '$2 \cdot sin(2 \cdot \pi \cdot t))$', '$combined$', '$combined$ $after$ $filter (f_{c}=0.5Hz, n=3)$'],
             loc=4, fontsize='small')
 plt.xlabel('time')
