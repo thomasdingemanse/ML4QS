@@ -49,7 +49,7 @@ def parse_data():
                         line = ",".join(values)
                         output_file.write(line)
 
-parse_data()
+# parse_data()
 
 print('Please wait, this will take a while to run!')
 
