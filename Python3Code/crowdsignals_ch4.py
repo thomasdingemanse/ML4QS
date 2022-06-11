@@ -89,9 +89,10 @@ def main():
         fs = float(1000)/milliseconds_per_instance
         ws = int(float(10000)/milliseconds_per_instance)
 
+        DataViz = VisualizeDataset('ch4_coding_questions')
+
         for measurement in MEASUREMENTS:
             # Let us create our visualization class again.
-            DataViz = VisualizeDataset(measurement)
 
             dataset = FreqAbs.abstract_frequency(dataset, [measurement], ws, fs)
             freqs = [col for col in dataset.columns if col.startswith(measurement + '_freq_')]
@@ -162,8 +163,10 @@ if __name__ == '__main__':
     parser.add_argument('--mode', type=str, default='final',
                         help= "Select what version to run: final, aggregation or freq \
                         'aggregation' studies the effect of several aggeregation methods \
+                        'coding_questions' plots individual frequencies for each measurement \
                         'frequency' applies a Fast Fourier transformation to a single variable \
-                        'final' is used for the next chapter ", choices=['aggregation', 'frequency', 'final']) 
+                        'final' is used for the next chapter ",
+                        choices=['aggregation', 'coding_questions', 'frequency', 'final']) 
 
     
 
