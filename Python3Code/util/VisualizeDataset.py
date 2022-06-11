@@ -50,7 +50,7 @@ class VisualizeDataset:
     # among multiple attributes (e.g. label which occurs as labelWalking, etc). In such a case they are plotted
     # in the same graph. The display should express whether points or a line should be plotted.
     # Match can be 'exact' or 'like'. Display can be 'points' or 'line'.
-    def plot_dataset(self, data_table, columns, match='like', display='line'):
+    def plot_dataset(self, data_table, columns, match='like', display='line', legend=True):
         names = list(data_table.columns)
 
         # Create subplots if more columns are specified.
@@ -101,8 +101,9 @@ class VisualizeDataset:
                                 self.line_displays[j%len(self.line_displays)])
 
             xar[i].tick_params(axis='y', labelsize=10)
-            xar[i].legend(relevant_cols, fontsize='xx-small', numpoints=1, loc='upper center',
-                          bbox_to_anchor=(0.5, 1.3), ncol=len(relevant_cols), fancybox=True, shadow=True)
+            if legend:
+                xar[i].legend(relevant_cols, fontsize='xx-small', numpoints=1, loc='lower center',
+                            bbox_to_anchor=(0.5, 1.3), ncol=len(relevant_cols), fancybox=True, shadow=True)
 
             xar[i].set_ylim([min(min_values) - 0.1*(max(max_values) - min(min_values)),
                              max(max_values) + 0.1*(max(max_values) - min(min_values))])

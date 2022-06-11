@@ -25,6 +25,17 @@ DATA_PATH = Path('./intermediate_datafiles/')
 DATASET_FNAME = 'chapter3_result_final.csv'
 RESULT_FNAME = 'chapter4_result.csv'
 
+MEASUREMENTS = ['acc_phone_x', 'acc_phone_y', 'acc_phone_z',
+                'acc_watch_x', 'acc_watch_y', 'acc_watch_z',
+                'gyr_phone_x', 'gyr_phone_y', 'gyr_phone_z',
+                'gyr_watch_x', 'gyr_watch_y', 'gyr_watch_z',
+                'mag_phone_x', 'mag_phone_y', 'mag_phone_z',
+                'mag_watch_x', 'mag_watch_y', 'mag_watch_z',
+                'mag_watch_x', 'mag_watch_y', 'mag_watch_z',
+                'hr_watch_rate',
+                'light_phone_lux', 
+                'press_phone_pressure']
+
 def print_flags():
     """
     Prints all entries in FLAGS variable.
@@ -72,6 +83,25 @@ def main():
         DataViz.plot_dataset(dataset, ['acc_phone_x', 'acc_phone_x_temp_mean', 'acc_phone_x_temp_std', 'label'], ['exact', 'like', 'like', 'like'], ['line', 'line', 'line', 'points'])
         print("--- %s seconds ---" % (time.time() - start_time))
   
+    if FLAGS.mode == 'coding_questions':
+        # Now we move to the frequency domain, with the same window size.
+       
+        fs = float(1000)/milliseconds_per_instance
+        ws = int(float(10000)/milliseconds_per_instance)
+
+        for measurement in MEASUREMENTS:
+            # Let us create our visualization class again.
+            DataViz = VisualizeDataset(measurement)
+
+            dataset = FreqAbs.abstract_frequency(dataset, [measurement], ws, fs)
+            freqs = [col for col in dataset.columns if col.startswith(measurement + '_freq_')]
+            
+            # Spectral analysis.
+            DataViz.plot_dataset(dataset, freqs + ['label'], 
+                ['like'] * (len(freqs) + 1), 
+                ['line'] * len(freqs) + ['points'],
+                legend = False)
+
     if FLAGS.mode == 'frequency':
         # Now we move to the frequency domain, with the same window size.
        
