@@ -111,6 +111,7 @@ class VisualizeDataset:
         plt.setp([a.get_xticklabels() for a in f.axes[:-1]], visible=False)
         plt.xlabel('time')
         self.save(plt)
+        plt.clf()
         # plt.show()
 
     def plot_xy(self, x, y, method='plot', xlabel=None, ylabel=None, xlim=None, ylim=None, names=None,
@@ -132,12 +133,14 @@ class VisualizeDataset:
             if names is not None: plt.legend(names)
 
         self.save(plt)
+        plt.clf()
         # plt.show()
 
     def plot_dataset_boxplot(self, dataset, cols):
         plt.Figure(); dataset[cols].plot.box()
         plt.ylim([-30,30])
         self.save(plt)
+        plt.clf()
         # plt.show()
 
     # This function plots the real and imaginary amplitudes of the frequencies found in the Fourier transformation.
@@ -148,6 +151,7 @@ class VisualizeDataset:
         plt.plot(freq, ampl_real, '+', freq, ampl_imag,'+')
         plt.legend(['real', 'imaginary'], numpoints=1)
         self.save(plt)
+        plt.clf()
         # plt.show()
 
     # Plot outliers in case of a binary outlier score. Here, the col specifies the real data
@@ -165,6 +169,7 @@ class VisualizeDataset:
         xar.plot(data_table.index[~data_table[outlier_col]], data_table[col][~data_table[outlier_col]], 'b+')
         plt.legend(['outlier ' + col, 'no_outlier_' + col], numpoints=1, fontsize='xx-small', loc='upper center',  ncol=2, fancybox=True, shadow=True)
         self.save(plt)
+        plt.clf()
         # plt.show()
 
     # Plot values that have been imputed using one of our imputation approaches. Here, values expresses the
@@ -198,6 +203,7 @@ class VisualizeDataset:
         plt.setp([a.get_xticklabels() for a in f.axes[:-1]], visible=False)
         plt.xlabel('time')
         self.save(plt)
+        plt.clf()
         # plt.show()
 
     # This function plots clusters that result from the application of a clustering algorithm
@@ -244,6 +250,7 @@ class VisualizeDataset:
 
         plt.legend(handles, labels, fontsize='xx-small', numpoints=1)
         self.save(plt)
+        plt.clf()
         # plt.show()
 
     # This function plots the silhouettes of the different clusters that have been identified. It plots the
@@ -290,6 +297,7 @@ class VisualizeDataset:
         ax1.set_yticks([])  # Clear the yaxis labels / ticks
         ax1.set_xticks([-0.1, 0, 0.2, 0.4, 0.6, 0.8, 1])
         self.save(plt)
+        plt.clf()
         # plt.show()
 
     # Plot a dendorgram for hierarchical clustering. It assumes that the linkage as
@@ -303,6 +311,7 @@ class VisualizeDataset:
         #dendrogram(linkage,truncate_mode='lastp',p=10, show_leaf_counts=True, leaf_rotation=90.,leaf_font_size=12.,show_contracted=True, labels=times)
         dendrogram(linkage,truncate_mode='lastp',p=16, show_leaf_counts=True, leaf_rotation=45.,leaf_font_size=8.,show_contracted=True, labels=times)
         self.save(plt)
+        plt.clf()
         # plt.show()
 
     # Plot the confusion matrix that has been derived in the evaluation metrics. Classes expresses the labels
@@ -330,6 +339,7 @@ class VisualizeDataset:
         plt.ylabel('True label')
         plt.xlabel('Predicted label')
         self.save(plt)
+        plt.clf()
         # plt.show()
 
     # This function plots the predictions or an algorithms (both for the training and test set) versus the real values for
@@ -368,6 +378,7 @@ class VisualizeDataset:
         plt.annotate('', xy=(test_time[0], y_coord_labels), xycoords='data', xytext=(test_time[-1], y_coord_labels), textcoords='data', arrowprops={'arrowstyle': '<->'})
         plt.annotate('test set', xy=(test_time[int(float(len(test_time))/2)], y_coord_labels*1.02), color='red', xycoords='data', ha='center')
         self.save(plt)
+        plt.clf()
         # plt.show()
 
     # Plot the Pareto front for multi objective optimization problems (for the dynamical systems stuff). We consider the
@@ -387,6 +398,7 @@ class VisualizeDataset:
         plt.ylabel('mse on ' + str(dynsys_output[0][0].columns[1]))
         #plt.savefig('{0} Example ({1}).pdf'.format(ea.__class__.__name__, problem.__class__.__name__), format='pdf')
         self.save(plt)
+        plt.clf()
         # plt.show()
 
     # Plot a prediction for a regression model in case it concerns a multi-objective dynamical systems model. Here, we plot
@@ -417,6 +429,7 @@ class VisualizeDataset:
         if not ylim is None:
             plt.ylim(ylim)
         self.save(plt)
+        plt.clf()
         # plt.show()
 
     def plot_performances_classification(self, algs, feature_subset_names, scores_over_all_algs):
