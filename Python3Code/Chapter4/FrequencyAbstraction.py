@@ -9,6 +9,7 @@
 
 import numpy as np
 import pandas as pd
+import scipy.stats as stats
 
 # This class performs a Fourier transformation on the data to find frequencies that occur
 # often and filter noise.
@@ -45,8 +46,14 @@ class FourierTransformation:
         else:
             pse = 0
 
+        # skewness = stats.skew(pse)
+
+        # kurtosis = stats.kurtosis(pse)
+
         real_ampl = np.insert(real_ampl, 0, max_freq)
         real_ampl = np.insert(real_ampl, 0, freq_weigthed)
+        # real_ampl = np.insert(real_ampl, 0, skewness)
+        # real_ampl = np.insert(real_ampl, 0, kurtosis)
         row = np.insert(real_ampl, 0, pse)
 
         self.temp_list.append(row)
@@ -63,6 +70,8 @@ class FourierTransformation:
             collist.append(col + '_max_freq')
             collist.append(col + '_freq_weighted')
             collist.append(col + '_pse')
+            # collist.append(col + '_skewness')
+            # collist.append(col + '_kurtosis')
             
             collist = collist + [col + '_freq_' +
                     str(freq) + '_Hz_ws_' + str(window_size) for freq in self.freqs]

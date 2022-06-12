@@ -53,6 +53,12 @@ class NumericalAbstraction:
             return data.rolling(window, min_periods=window_size).apply(self.get_slope)
         
         #TODO: add your own aggregation function here
+
+        elif aggregation_function == 'entropy':
+            return data.rolling(window, min_periods=window_size).apply(stats.entropy)
+        elif aggregation_function == 'kurtosis':
+            return data.rolling(window, min_periods=window_size).apply(stats.kurtosis)
+        
         else:
             return np.nan
 

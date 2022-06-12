@@ -31,7 +31,6 @@ MEASUREMENTS = ['acc_phone_x', 'acc_phone_y', 'acc_phone_z',
                 'gyr_watch_x', 'gyr_watch_y', 'gyr_watch_z',
                 'mag_phone_x', 'mag_phone_y', 'mag_phone_z',
                 'mag_watch_x', 'mag_watch_y', 'mag_watch_z',
-                'mag_watch_x', 'mag_watch_y', 'mag_watch_z',
                 'hr_watch_rate',
                 'light_phone_lux', 
                 'press_phone_pressure']
@@ -79,8 +78,10 @@ def main():
                    
             dataset = NumAbs.abstract_numerical(dataset, ['acc_phone_x'], ws, 'mean')
             dataset = NumAbs.abstract_numerical(dataset, ['acc_phone_x'], ws, 'std')
+            dataset = NumAbs.abstract_numerical(dataset, ['acc_phone_x'], ws, 'entropy')
+            dataset = NumAbs.abstract_numerical(dataset, ['acc_phone_x'], ws, 'kurtosis')
 
-        DataViz.plot_dataset(dataset, ['acc_phone_x', 'acc_phone_x_temp_mean', 'acc_phone_x_temp_std', 'label'], ['exact', 'like', 'like', 'like'], ['line', 'line', 'line', 'points'])
+        DataViz.plot_dataset(dataset, ['acc_phone_x', 'acc_phone_x_temp_mean', 'acc_phone_x_temp_std', 'acc_phone_x_temp_entropy', 'acc_phone_x_temp_kurtosis', 'label'], ['exact', 'like', 'like', 'like', 'like', 'like'], ['line', 'line', 'line', 'line', 'line', 'points'])
         print("--- %s seconds ---" % (time.time() - start_time))
   
     if FLAGS.mode == 'coding_questions':
@@ -89,7 +90,7 @@ def main():
         fs = float(1000)/milliseconds_per_instance
         ws = int(float(10000)/milliseconds_per_instance)
 
-        DataViz = VisualizeDataset('ch4_coding_questions')
+        DataViz = VisualizeDataset('crowdsignals_ch4_coding_questions')
 
         for measurement in MEASUREMENTS:
             # Let us create our visualization class again.
@@ -110,7 +111,7 @@ def main():
         ws = int(float(10000)/milliseconds_per_instance)
         dataset = FreqAbs.abstract_frequency(dataset, ['acc_phone_x'], ws, fs)
         # Spectral analysis.
-        DataViz.plot_dataset(dataset, ['acc_phone_x_max_freq', 'acc_phone_x_freq_weighted', 'acc_phone_x_pse', 'label'], ['like', 'like', 'like', 'like'], ['line', 'line', 'line','points'])
+        DataViz.plot_dataset(dataset, ['acc_phone_x_max_freq', 'acc_phone_x_freq_weighted', 'acc_phone_x_pse', 'label'], ['like', 'like', 'like' 'like'], ['line', 'line', 'line', 'points'])
         print("--- %s seconds ---" % (time.time() - start_time))
   
     if FLAGS.mode == 'final':
