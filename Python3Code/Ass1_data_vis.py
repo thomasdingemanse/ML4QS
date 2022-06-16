@@ -35,8 +35,8 @@ FILES = ['Accelerometer.csv', 'Barometer.csv', 'Gyroscope.csv', 'Linear Accelero
 labels_filename = os.path.join(os.getcwd(), DATASET_PATH, 'labels.csv')
 with open(labels_filename, 'w') as labels_file:
     labels_file.write("sensor_type,device_type,label,label_start,label_start_datetime,label_end,label_end_datetime\n")
-    initial_timestamp = 1654618487.0
     for file in FILES:
+        initial_timestamp = 1654618487.0
         output_filename = os.path.join(os.getcwd(), DATASET_PATH, file.lower().replace(" ", "_"))
         if os.path.exists(output_filename):
             os.remove(output_filename)

@@ -76,7 +76,7 @@ for milliseconds_per_instance in GRANULARITIES:
 
     # # And print a summary of the dataset.
     # util.print_statistics(dataset)
-    # datasets.append(copy.deepcopy(dataset))
+    datasets.append(copy.deepcopy(dataset))
 
     # If needed, we could save the various versions of the dataset we create in the loop with logical filenames:
     # dataset.to_csv(RESULT_PATH / f'chapter2_result_{milliseconds_per_instance}')
