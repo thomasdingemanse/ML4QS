@@ -60,7 +60,7 @@ with open(labels_filename, 'w') as labels_file:
                 end_datetime = datetime.fromtimestamp(timestamp)
                 
                 if file == 'Accelerometer.csv':
-                    labels_file.write(f"interval_label,smartphone,{dir},{initial_timestamp},{start_datetime},{timestamp},{end_datetime}\n")
+                    labels_file.write(f"interval_label,smartphone,{dir},{int(initial_timestamp*float(10**9))},{start_datetime},{int(timestamp * float(10**9))},{end_datetime}\n")
                     print(dir, initial_timestamp, "-", timestamp)
 
                 initial_timestamp = timestamp + 1.0

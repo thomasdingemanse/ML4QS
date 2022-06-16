@@ -48,11 +48,13 @@ for milliseconds_per_instance in GRANULARITIES:
 #     # We add the gyroscope data (continuous numerical measurements) of the phone and the smartwatch
 #     # and aggregate the values per timestep by averaging the values
     dataset.add_numerical_dataset('gyroscope.csv', 'Time (s)', ['X (rad/s)','Y (rad/s)','Z (rad/s)'], 'avg', 'gyr_phone_')
-    print(dataset)
+    
 #     # We add the labels provided by the users. These are categorical events that might overlap. We add them
 #     # as binary attributes (i.e. add a one to the attribute representing the specific value for the label if it
 #     # occurs within an interval).
     dataset.add_event_dataset('labels.csv', 'label_start', 'label_end', 'label', 'binary')
+    # print(dataset[dataset['labelFietsen']])
+    print(dataset)
 
 #     # We add the magnetometer data (continuous numerical measurements) of the phone and the smartwatch
 #     # and aggregate the values per timestep by averaging the values
