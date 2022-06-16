@@ -46,7 +46,8 @@ with open(labels_filename, 'w') as labels_file:
                 with open(os.path.join(os.getcwd(), DATASET_PATH, dir, file)) as input_file:
                     lines = input_file.readlines()
                     lines[0] = lines[0].replace(';', ',')
-                    output_file.write(lines[0])
+                    if dir == 'Fietsen':
+                        output_file.write(lines[0])
                     for line in lines[1:]:
                         values = [value.replace(',', '.') for value in line.split(';')]
                         time = float(values[0])
