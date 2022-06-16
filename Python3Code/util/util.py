@@ -79,7 +79,7 @@ def print_latex_statistics_clusters(dataset, cluster_col, input_cols, label_col)
     for l in label_cols:
         print(l, ' & percentage ', end='')
         for cluster in clusters:
-            print(' & ', "{0:.2f}".format((float(dataset.loc[dataset[cluster_col] == cluster, l].sum())/len(dataset[dataset[l] == 1].index) * 100)), '\%', end='')
+            print(' & ', "{0:.2f}".format((float(dataset.loc[dataset[cluster_col] == cluster, l].sum())/((len(dataset[dataset[l] == 1].index) * 100)+ 0.000001)), '\%', end=''))
         print('\\\\')
 
 def print_table_row_performances(row_name, training_len, test_len, values):

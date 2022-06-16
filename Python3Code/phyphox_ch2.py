@@ -42,7 +42,7 @@ for milliseconds_per_instance in GRANULARITIES:
 
     # We add the accelerometer data (continuous numerical measurements) of the phone and the smartwatch
     # and aggregate the values per timestep by averaging the values
-    # dataset.add_numerical_dataset('accelerometer.csv', 'Time (s)', ['X (m/s^2)','Y (m/s^2)','Z (m/s^2)'], 'avg', 'acc_phone_')
+    dataset.add_numerical_dataset('accelerometer.csv', 'Time (s)', ['X (m/s^2)','Y (m/s^2)','Z (m/s^2)'], 'avg', 'acc_phone_')
 
 
 #     # We add the gyroscope data (continuous numerical measurements) of the phone and the smartwatch
@@ -52,11 +52,11 @@ for milliseconds_per_instance in GRANULARITIES:
 #     # We add the labels provided by the users. These are categorical events that might overlap. We add them
 #     # as binary attributes (i.e. add a one to the attribute representing the specific value for the label if it
 #     # occurs within an interval).
-    # dataset.add_event_dataset('labels.csv', 'label_start', 'label_end', 'label', 'binary')
+    dataset.add_event_dataset('labels.csv', 'label_start', 'label_end', 'label', 'binary')
 
 #     # We add the magnetometer data (continuous numerical measurements) of the phone and the smartwatch
 #     # and aggregate the values per timestep by averaging the values
-    # dataset.add_numerical_dataset('magnetometer.csv', 'Time (s)', ['X (µT)','Y (µT)','Z (µT)'], 'avg', 'mag_phone_')
+    dataset.add_numerical_dataset('magnetometer.csv', 'Time (s)', ['X (µT)','Y (µT)','Z (µT)'], 'avg', 'mag_phone_')
 
 
 #     # Get the resulting pandas data table
@@ -66,20 +66,20 @@ for milliseconds_per_instance in GRANULARITIES:
     DataViz = VisualizeDataset(__file__)
 
 #     # Boxplot
-    # DataViz.plot_dataset_boxplot(dataset, ['acc_phone_X (m/s^2)','acc_phone_Y (m/s^2)','acc_phone_Z (m/s^2)'])
+    DataViz.plot_dataset_boxplot(dataset, ['acc_phone_X (m/s^2)','acc_phone_Y (m/s^2)','acc_phone_Z (m/s^2)'])
 
     print(dataset)
     # Plot all data
-    # DataViz.plot_dataset(dataset, ['acc_', 'gyr_', 'mag_', 'label'],
-    #                               ['like', 'like', 'like', 'like', 'like', 'like', 'like','like'],
-    #                               ['line', 'line', 'line', 'line', 'line', 'line', 'points', 'points'])
+    DataViz.plot_dataset(dataset, ['acc_', 'gyr_', 'mag_', 'label'],
+                                  ['like', 'like', 'like', 'like', 'like', 'like', 'like','like'],
+                                  ['line', 'line', 'line', 'line', 'line', 'line', 'points', 'points'])
 
     # # And print a summary of the dataset.
-    # util.print_statistics(dataset)
+    util.print_statistics(dataset)
     datasets.append(copy.deepcopy(dataset))
 
     # If needed, we could save the various versions of the dataset we create in the loop with logical filenames:
-    # dataset.to_csv(RESULT_PATH / f'chapter2_result_{milliseconds_per_instance}')
+    dataset.to_csv(RESULT_PATH / f'chapter2_result_{milliseconds_per_instance}')
 
 
 # Make a table like the one shown in the book, comparing the two datasets produced.

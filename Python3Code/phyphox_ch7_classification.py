@@ -45,6 +45,7 @@ except IOError as e:
 
 dataset.index = pd.to_datetime(dataset.index)
 
+print(dataset)
 # Let us create our visualization class again.
 DataViz = VisualizeDataset(__file__)
 
@@ -63,8 +64,8 @@ print('Test set length is: ', len(test_X.index))
 
 # Select subsets of the features that we will consider:
 
-basic_features = ['acc_phone_x','acc_phone_y','acc_phone_z','acc_watch_x','acc_watch_y','acc_watch_z','gyr_phone_x','gyr_phone_y','gyr_phone_z','gyr_watch_x','gyr_watch_y','gyr_watch_z',
-                  'hr_watch_rate', 'light_phone_lux','mag_phone_x','mag_phone_y','mag_phone_z','mag_watch_x','mag_watch_y','mag_watch_z','press_phone_pressure']
+basic_features = ['acc_phone_X (m/s^2)','acc_phone_Y (m/s^2)','acc_phone_Z (m/s^2)','gyr_phone_X (rad/s)','gyr_phone_Y (rad/s)','gyr_phone_Z (rad/s)',
+                  'mag_phone_X (µT)','mag_phone_Y (µT)','mag_phone_Z (µT)']
 pca_features = ['pca_1','pca_2','pca_3','pca_4','pca_5','pca_6','pca_7']
 time_features = [name for name in dataset.columns if '_temp_' in name]
 freq_features = [name for name in dataset.columns if (('_freq' in name) or ('_pse' in name))]
@@ -95,9 +96,9 @@ DataViz.plot_xy(x=[range(1, N_FORWARD_SELECTION+1)], y=[ordered_scores],
 
 
 # based on python2 features, slightly different. 
-selected_features = ['acc_phone_y_freq_0.0_Hz_ws_40', 'press_phone_pressure_temp_mean_ws_120', 'gyr_phone_x_temp_std_ws_120',
-                     'mag_watch_y_pse', 'mag_phone_z_max_freq', 'gyr_watch_y_freq_weighted', 'gyr_phone_y_freq_1.0_Hz_ws_40',
-                     'acc_phone_x_freq_1.9_Hz_ws_40', 'mag_watch_z_freq_0.9_Hz_ws_40', 'acc_watch_y_freq_0.5_Hz_ws_40']
+selected_features = ['acc_phone_y_freq_0.0_Hz_ws_40', 'gyr_phone_x_temp_std_ws_120',
+                     'mag_phone_z_max_freq', 'gyr_phone_y_freq_1.0_Hz_ws_40',
+                     'acc_phone_x_freq_1.9_Hz_ws_40']
 
 # # # Let us first study the impact of regularization and model complexity: does regularization prevent overfitting?
 

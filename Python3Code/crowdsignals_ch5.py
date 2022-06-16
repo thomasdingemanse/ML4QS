@@ -130,6 +130,7 @@ def main():
         dataset = clusteringNH.k_means_over_instances(dataset, ['acc_phone_x', 'acc_phone_y', 'acc_phone_z'], FLAGS.k, 'default', 50, 50)
         DataViz.plot_clusters_3d(dataset, ['acc_phone_x', 'acc_phone_y', 'acc_phone_z'], 'cluster', ['label'])
         DataViz.plot_silhouette(dataset, 'cluster', 'silhouette')
+        
         util.print_latex_statistics_clusters(
             dataset, 'cluster', ['acc_phone_x', 'acc_phone_y', 'acc_phone_z'], 'label')
         del dataset['silhouette']

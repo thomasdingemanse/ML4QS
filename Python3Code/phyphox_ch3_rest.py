@@ -58,21 +58,21 @@ def main():
     LowPass = LowPassFilter()
     PCA = PrincipalComponentAnalysis()
 
-    if FLAGS.mode == 'imputation':
+    # if FLAGS.mode == 'imputation':
         # Let us impute the missing values and plot an example.
        
-        imputed_mean_dataset = MisVal.impute_mean(copy.deepcopy(dataset), 'hr_watch_rate')       
-        imputed_median_dataset = MisVal.impute_median(copy.deepcopy(dataset), 'hr_watch_rate')
-        imputed_interpolation_dataset = MisVal.impute_interpolate(copy.deepcopy(dataset), 'hr_watch_rate')
-        imputed_KNN_dataset = MisVal.impute_model_based(copy.deepcopy(dataset), 'hr_watch_rate')
+        # imputed_mean_dataset = MisVal.impute_mean(copy.deepcopy(dataset), 'hr_watch_rate')       
+        # imputed_median_dataset = MisVal.impute_median(copy.deepcopy(dataset), 'hr_watch_rate')
+        # imputed_interpolation_dataset = MisVal.impute_interpolate(copy.deepcopy(dataset), 'hr_watch_rate')
+        # imputed_KNN_dataset = MisVal.impute_model_based(copy.deepcopy(dataset), 'hr_watch_rate')
         
-        DataViz.plot_imputed_values(dataset, ['original', 'mean', 'median', 'interpolation', 'KNN'], 'hr_watch_rate',
-                                    imputed_mean_dataset['hr_watch_rate'], 
-                                    imputed_median_dataset['hr_watch_rate'],
-                                    imputed_interpolation_dataset['hr_watch_rate'],
-                                    imputed_KNN_dataset['hr_watch_rate'])
+        # DataViz.plot_imputed_values(dataset, ['original', 'mean', 'median', 'interpolation', 'KNN'], 'hr_watch_rate',
+        #                             imputed_mean_dataset['hr_watch_rate'], 
+        #                             imputed_median_dataset['hr_watch_rate'],
+        #                             imputed_interpolation_dataset['hr_watch_rate'],
+        #                             imputed_KNN_dataset['hr_watch_rate'])
 
-    elif FLAGS.mode == 'kalman':
+    if FLAGS.mode == 'kalman':
         # Using the result from Chapter 2, let us try the Kalman filter on the light_phone_lux attribute and study the result.
         try:
             original_dataset = pd.read_csv(
@@ -84,10 +84,10 @@ def main():
 
         KalFilter = KalmanFilters()
         kalman_dataset = KalFilter.apply_kalman_filter(
-            original_dataset, 'acc_phone_x')
+            original_dataset, 'acc_phone_X (m/s^2)')
         DataViz.plot_imputed_values(kalman_dataset, [
-                                    'original', 'kalman'], 'acc_phone_x', kalman_dataset['acc_phone_x_kalman'])
-        DataViz.plot_dataset(kalman_dataset, ['acc_phone_x', 'acc_phone_x_kalman'], [
+                                    'original', 'kalman'], 'acc_phone_X (m/s^2)', kalman_dataset['acc_phone_x_kalman'])
+        DataViz.plot_dataset(kalman_dataset, ['acc_phone_X (m/s^2)', 'acc_phone_X (m/s^2)_kalman'], [
                              'exact', 'exact'], ['line', 'line'])
 
         # We ignore the Kalman filter output for now...
@@ -101,9 +101,9 @@ def main():
         cutoff = 1.5
         # Let us study acc_phone_x:
         new_dataset = LowPass.low_pass_filter(copy.deepcopy(
-            dataset), 'acc_phone_x', fs, cutoff, order=10)
+            dataset), 'acc_phone_X (m/s^2)', fs, cutoff, order=10)
         DataViz.plot_dataset(new_dataset.iloc[int(0.4*len(new_dataset.index)):int(0.43*len(new_dataset.index)), :],
-                             ['acc_phone_x', 'acc_phone_x_lowpass'], ['exact', 'exact'], ['line', 'line'])
+                             ['acc_phone_X (m/s^2)', 'acc_phone_X (m/s^2)_lowpass'], ['exact', 'exact'], ['line', 'line'])
 
     elif FLAGS.mode == 'PCA':
 
@@ -113,7 +113,7 @@ def main():
 
        
         selected_predictor_cols = [c for c in dataset.columns if (
-            not ('label' in c)) and (not (c == 'hr_watch_rate'))]
+            not ('label' in c))]
         pc_values = PCA.determine_pc_explained_variance(
             dataset, selected_predictor_cols)
 
@@ -141,9 +141,8 @@ def main():
             dataset = MisVal.impute_interpolate(dataset, col)
 
         # And now let us include all LOWPASS measurements that have a form of periodicity (and filter them):
-        periodic_measurements = ['acc_phone_x', 'acc_phone_y', 'acc_phone_z', 'acc_watch_x', 'acc_watch_y', 'acc_watch_z', 'gyr_phone_x', 'gyr_phone_y',
-                                 'gyr_phone_z', 'gyr_watch_x', 'gyr_watch_y', 'gyr_watch_z', 'mag_phone_x', 'mag_phone_y', 'mag_phone_z', 'mag_watch_x',
-                                 'mag_watch_y', 'mag_watch_z']
+        periodic_measurements = ['acc_phone_X (m/s^2)', 'acc_phone_Y (m/s^2)', 'acc_phone_Z (m/s^2)', 'gyr_phone_X (rad/s)', 'gyr_phone_Y (rad/s)',
+                                 'gyr_phone_Z (rad/s)', 'mag_phone_X (µT)', 'mag_phone_Y (µT)', 'mag_phone_Z (µT)']
 
         
         # Let us apply a lowpass filter and reduce the importance of the data above 1.5 Hz
@@ -160,14 +159,14 @@ def main():
 
         # We used the optimal found parameter n_pcs = 7, to apply PCA to the final dataset
        
-        selected_predictor_cols = [c for c in dataset.columns if (not ('label' in c)) and (not (c == 'hr_watch_rate'))]
+        selected_predictor_cols = [c for c in dataset.columns if (not ('label' in c))]
         
         n_pcs = 7
         
         dataset = PCA.apply_pca(copy.deepcopy(dataset), selected_predictor_cols, n_pcs)
 
         # And the overall final dataset:
-        DataViz.plot_dataset(dataset, ['acc_', 'gyr_', 'hr_watch_rate', 'light_phone_lux', 'mag_', 'press_phone_', 'pca_', 'label'],
+        DataViz.plot_dataset(dataset, ['acc_', 'gyr_', 'mag_', 'pca_', 'label'],
                              ['like', 'like', 'like', 'like', 'like',
                                  'like', 'like', 'like', 'like'],
                              ['line', 'line', 'line', 'line', 'line', 'line', 'line', 'points', 'points'])
@@ -180,7 +179,7 @@ def main():
 if __name__ == '__main__':
     # Command line arguments
     parser = argparse.ArgumentParser()
-    parser.add_argument('--mode', type=str, default='imputation',
+    parser.add_argument('--mode', type=str, default='final',
                         help="Select what version to run: final, imputation, lowpass or PCA \
                         'lowpass' applies the lowpass-filter to a single variable \
                         'imputation' is used for the next chapter \
