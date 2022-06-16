@@ -1,5 +1,5 @@
 *.pyc
-datasets
+Python3Code/datasets/crowdsignals/
+Python3Code/datasets/crowdsignals.zip
 PythonCode/intermediate_datafiles/
 PythonCode/Example_graphs/
-*_timestamps.csv
