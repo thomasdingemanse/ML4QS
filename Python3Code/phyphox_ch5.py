@@ -54,7 +54,10 @@ def main():
         for k in k_values:
             print(f'k = {k}')
             dataset_cluster = clusteringNH.k_means_over_instances(copy.deepcopy(
-                dataset), ['acc_phone_X (m/s^2)', 'acc_phone_Y (m/s^2)', 'acc_phone_Z (m/s^2)'], k, 'default', 20, 10)
+                dataset), ['acc_phone_X (m/s^2)', 'acc_phone_Y (m/s^2)', 'acc_phone_Z (m/s^2)',
+                           'gyr_phone_X (rad/s)', 'gyr_phone_Y (rad/s)', 'gyr_phone_Z (rad/s)',
+                           'mag_phone_X (µT)', 'mag_phone_Y (µT)', 'mag_phone_Z (µT)'],
+                           k, 'default', 20, 10)
             silhouette_score = dataset_cluster['silhouette'].mean()
             print(f'silhouette = {silhouette_score}')
             silhouette_values.append(silhouette_score)
@@ -78,7 +81,9 @@ def main():
         for k in k_values:
             print(f'k = {k}')
             dataset_cluster = clusteringNH.k_medoids_over_instances(copy.deepcopy(
-                dataset), ['acc_phone_X (m/s^2)', 'acc_phone_Y (m/s^2)', 'acc_phone_Z (m/s^2)'], k, 'default', 20, n_inits=10)
+                dataset), ['acc_phone_X (m/s^2)', 'acc_phone_Y (m/s^2)', 'acc_phone_Z (m/s^2)',
+                           'gyr_phone_X (rad/s)', 'gyr_phone_Y (rad/s)', 'gyr_phone_Z (rad/s)',
+                           'mag_phone_X (µT)', 'mag_phone_Y (µT)', 'mag_phone_Z (µT)'], k, 'default', 20, n_inits=10)
             silhouette_score = dataset_cluster['silhouette'].mean()
             print(f'silhouette = {silhouette_score}')
             silhouette_values.append(silhouette_score)
@@ -93,12 +98,17 @@ def main():
         print(f'Highest K-Medoids silhouette score: k = {k}')
 
         dataset_kmed = clusteringNH.k_medoids_over_instances(copy.deepcopy(dataset), [
-                                                             'acc_phone_X (m/s^2)', 'acc_phone_Y (m/s^2)', 'acc_phone_Z (m/s^2)'], k, 'default', 20, n_inits=50)
-        DataViz.plot_clusters_3d(dataset_kmed, [
-                                 'acc_phone_X (m/s^2)', 'acc_phone_Y (m/s^2)', 'acc_phone_Z (m/s^2)'], 'cluster', ['label'])
+                           'acc_phone_X (m/s^2)', 'acc_phone_Y (m/s^2)', 'acc_phone_Z (m/s^2)',
+                           'gyr_phone_X (rad/s)', 'gyr_phone_Y (rad/s)', 'gyr_phone_Z (rad/s)',
+                           'mag_phone_X (µT)', 'mag_phone_Y (µT)', 'mag_phone_Z (µT)'
+                        ], k, 'default', 20, n_inits=50)
+        DataViz.plot_clusters_3d(dataset_kmed, ['acc_phone_X (m/s^2)', 'acc_phone_Y (m/s^2)', 'acc_phone_Z (m/s^2)',
+                           'gyr_phone_X (rad/s)', 'gyr_phone_Y (rad/s)', 'gyr_phone_Z (rad/s)',
+                           'mag_phone_X (µT)', 'mag_phone_Y (µT)', 'mag_phone_Z (µT)'], 'cluster', ['label'])
         DataViz.plot_silhouette(dataset_kmed, 'cluster', 'silhouette')
-        util.print_latex_statistics_clusters(dataset_kmed, 'cluster', [
-                                             'acc_phone_X (m/s^2)', 'acc_phone_Y (m/s^2)', 'acc_phone_Z (m/s^2)'], 'label')
+        util.print_latex_statistics_clusters(dataset_kmed, 'cluster', ['acc_phone_X (m/s^2)', 'acc_phone_Y (m/s^2)', 'acc_phone_Z (m/s^2)',
+                           'gyr_phone_X (rad/s)', 'gyr_phone_Y (rad/s)', 'gyr_phone_Z (rad/s)',
+                           'mag_phone_X (µT)', 'mag_phone_Y (µT)', 'mag_phone_Z (µT)'], 'label')
 
     # And the hierarchical clustering is the last one we try
     if FLAGS.mode == 'agglomerative':
@@ -112,7 +122,10 @@ def main():
         for k in k_values:
             print(f'k = {k}')
             dataset, l = clusteringH.agglomerative_over_instances(dataset, [
-                                                                          'acc_phone_X (m/s^2)', 'acc_phone_Y (m/s^2)', 'acc_phone_Z (m/s^2)'], k, 'euclidean', use_prev_linkage=True, link_function='ward')
+                           'acc_phone_X (m/s^2)', 'acc_phone_Y (m/s^2)', 'acc_phone_Z (m/s^2)',
+                           'gyr_phone_X (rad/s)', 'gyr_phone_Y (rad/s)', 'gyr_phone_Z (rad/s)',
+                           'mag_phone_X (µT)', 'mag_phone_Y (µT)', 'mag_phone_Z (µT)'
+                        ], k, 'euclidean', use_prev_linkage=True, link_function='ward')
             silhouette_score = dataset['silhouette'].mean()
             print(f'silhouette = {silhouette_score}')
             silhouette_values.append(silhouette_score)
@@ -127,13 +140,19 @@ def main():
         # And we select the outcome dataset of the knn clustering....
         clusteringNH = NonHierarchicalClustering()
 
-        dataset = clusteringNH.k_means_over_instances(dataset, ['acc_phone_X (m/s^2)', 'acc_phone_Y (m/s^2)', 'acc_phone_Z (m/s^2)'], FLAGS.k, 'default', 50, 50)
-        DataViz.plot_clusters_3d(dataset, ['acc_phone_X (m/s^2)', 'acc_phone_Y (m/s^2)', 'acc_phone_Z (m/s^2)'], 'cluster', ['label'])
+        dataset = clusteringNH.k_means_over_instances(dataset, ['acc_phone_X (m/s^2)', 'acc_phone_Y (m/s^2)', 'acc_phone_Z (m/s^2)',
+                           'gyr_phone_X (rad/s)', 'gyr_phone_Y (rad/s)', 'gyr_phone_Z (rad/s)',
+                           'mag_phone_X (µT)', 'mag_phone_Y (µT)', 'mag_phone_Z (µT)'], FLAGS.k, 'default', 50, 50)
+        DataViz.plot_clusters_3d(dataset, ['acc_phone_X (m/s^2)', 'acc_phone_Y (m/s^2)', 'acc_phone_Z (m/s^2)',
+                           'gyr_phone_X (rad/s)', 'gyr_phone_Y (rad/s)', 'gyr_phone_Z (rad/s)',
+                           'mag_phone_X (µT)', 'mag_phone_Y (µT)', 'mag_phone_Z (µT)'], 'cluster', ['label'])
         DataViz.plot_silhouette(dataset, 'cluster', 'silhouette')
 
         
         util.print_latex_statistics_clusters(
-            dataset, 'cluster', ['acc_phone_X (m/s^2)', 'acc_phone_Y (m/s^2)', 'acc_phone_Z (m/s^2)'], 'label')
+            dataset, 'cluster', ['acc_phone_X (m/s^2)', 'acc_phone_Y (m/s^2)', 'acc_phone_Z (m/s^2)',
+                           'gyr_phone_X (rad/s)', 'gyr_phone_Y (rad/s)', 'gyr_phone_Z (rad/s)',
+                           'mag_phone_X (µT)', 'mag_phone_Y (µT)', 'mag_phone_Z (µT)'], 'label')
         del dataset['silhouette']
 
         dataset.to_csv(DATA_PATH / RESULT_FNAME)
