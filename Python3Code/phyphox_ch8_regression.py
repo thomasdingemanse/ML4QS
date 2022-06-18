@@ -214,7 +214,7 @@ def main():
     util.print_table_row_performances_regression(feature_names[i], len(selected_train_X.index), len(selected_test_X.index), scores_with_sd)
     scores_over_all_algs.append(scores_with_sd)
 
-    DataViz.plot_performances_regression(['Reservoir', 'RNN', 'Time series'], feature_names[i], scores_over_all_algs)
+    DataViz.plot_performances_regression(['Reservoir', 'RNN', 'Time series'], [feature_names[i]], scores_over_all_algs)
 
     regr_train_y, regr_test_y = learner.reservoir_computing(train_X[features_after_chapter_5], train_y, test_X[features_after_chapter_5], test_y, gridsearch=False)
     DataViz.plot_numerical_prediction_versus_real(train_X.index, train_y, regr_train_y['acc_phone_x'], test_X.index, test_y, regr_test_y['acc_phone_x'], 'accelerometer X (m/s^2)')
