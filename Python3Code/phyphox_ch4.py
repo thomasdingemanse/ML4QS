@@ -145,6 +145,11 @@ def main():
         skip_points = int((1-window_overlap) * ws)
         dataset = dataset.iloc[::skip_points,:]
 
+        # For some reason the first 4 lines have NaN for all temporal and
+        # frequency domain features. The 7 subsequent rows have NaN for all
+        # temporal aggregation functions (mean and std). Let's go with the easy
+        # solution: just drop them and hope that it's not a problem later on.
+        dataset = dataset.drop(labels=dataset.index[0:11],axis=0)
 
         dataset.to_csv(DATA_PATH / RESULT_FNAME)
 
