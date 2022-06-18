@@ -26,6 +26,8 @@ from pathlib import Path
 from sklearn.model_selection import train_test_split
 import argparse
 
+feature_choices = ['initial', 'ch3', 'ch4', 'ch5', 'selected']
+
 def main():
 
     # Set up file names and locations.
@@ -130,91 +132,87 @@ def main():
     washout_time = 10
 
     scores_over_all_algs = []
-
-    # for i in range(0, len(possible_feature_sets)):
-
-    if FLAGS.features == 'initial':
-        i = 0
-    elif FLAGS.features == 'ch3':
-        i = 1
-    elif FLAGS.features == 'ch4':
-        i = 2
-    elif FLAGS.features == 'ch5':
-        i = 3
-    elif FLAGS.features == 'selected':
-        i = 4
     
-    print(f'Evaluating for features {possible_feature_sets[i]}')
-    selected_train_X = train_X[possible_feature_sets[i]]
-    selected_test_X = test_X[possible_feature_sets[i]]
-    
-    # First we run our non deterministic classifiers a number of times to average their score.
+    for i in range(0, len(possible_feature_sets)):
+        if FLAGS.features != 'all' and FLAGS.features != feature_choices[i]:
+            continue
 
-    performance_tr_res = 0
-    performance_tr_res_std = 0
-    performance_te_res = 0
-    performance_te_res_std = 0
-    performance_tr_rnn = 0
-    performance_tr_rnn_std = 0
-    performance_te_rnn = 0
-    performance_te_rnn_std = 0
+        print(f'Evaluating for features {possible_feature_sets[i]}')
+        selected_train_X = train_X[possible_feature_sets[i]]
+        selected_test_X = test_X[possible_feature_sets[i]]
+        
+        # First we run our non deterministic classifiers a number of times to average their score.
 
-    for repeat in range(0, repeats):
-        print(f'---- run {repeat} ---')
-        regr_train_y, regr_test_y = learner.reservoir_computing(selected_train_X, train_y, selected_test_X, test_y, gridsearch=True, per_time_step=False)
+        performance_tr_res = 0
+        performance_tr_res_std = 0
+        performance_te_res = 0
+        performance_te_res_std = 0
+        performance_tr_rnn = 0
+        performance_tr_rnn_std = 0
+        performance_te_rnn = 0
+        performance_te_rnn_std = 0
 
-        mean_tr, std_tr = eval.mean_squared_error_with_std(train_y.iloc[washout_time:,], regr_train_y.iloc[washout_time:,])
-        mean_te, std_te = eval.mean_squared_error_with_std(test_y.iloc[washout_time:,], regr_test_y.iloc[washout_time:,])
+        for repeat in range(0, repeats):
+            print(f'---- run {repeat} ---')
+            regr_train_y, regr_test_y = learner.reservoir_computing(selected_train_X, train_y, selected_test_X, test_y, gridsearch=True, per_time_step=False)
 
-        performance_tr_res += mean_tr
-        performance_tr_res_std += std_tr
-        performance_te_res += mean_te
-        performance_te_res_std += std_te
+            mean_tr, std_tr = eval.mean_squared_error_with_std(train_y.iloc[washout_time:,], regr_train_y.iloc[washout_time:,])
+            mean_te, std_te = eval.mean_squared_error_with_std(test_y.iloc[washout_time:,], regr_test_y.iloc[washout_time:,])
 
-        regr_train_y, regr_test_y = learner.recurrent_neural_network(selected_train_X, train_y, selected_test_X, test_y, gridsearch=True)
+            performance_tr_res += mean_tr
+            performance_tr_res_std += std_tr
+            performance_te_res += mean_te
+            performance_te_res_std += std_te
 
-        mean_tr, std_tr = eval.mean_squared_error_with_std(train_y.iloc[washout_time:,], regr_train_y.iloc[washout_time:,])
-        mean_te, std_te = eval.mean_squared_error_with_std(test_y.iloc[washout_time:,], regr_test_y.iloc[washout_time:,])
+            regr_train_y, regr_test_y = learner.recurrent_neural_network(selected_train_X, train_y, selected_test_X, test_y, gridsearch=True)
 
-        performance_tr_rnn += mean_tr
-        performance_tr_rnn_std += std_tr
-        performance_te_rnn += mean_te
-        performance_te_rnn_std += std_te
+            mean_tr, std_tr = eval.mean_squared_error_with_std(train_y.iloc[washout_time:,], regr_train_y.iloc[washout_time:,])
+            mean_te, std_te = eval.mean_squared_error_with_std(test_y.iloc[washout_time:,], regr_test_y.iloc[washout_time:,])
+
+            performance_tr_rnn += mean_tr
+            performance_tr_rnn_std += std_tr
+            performance_te_rnn += mean_te
+            performance_te_rnn_std += std_te
 
 
-    # We only apply the time series in case of the basis features.
-    if (feature_names[i] == 'initial set'):
-        regr_train_y, regr_test_y = learner.time_series(selected_train_X, train_y, selected_test_X, test_y, gridsearch=True)
+        # We only apply the time series in case of the basis features.
+        if (feature_names[i] == 'initial set'):
+            regr_train_y, regr_test_y = learner.time_series(selected_train_X, train_y, selected_test_X, test_y, gridsearch=True)
 
-        mean_tr, std_tr = eval.mean_squared_error_with_std(train_y.iloc[washout_time:,], regr_train_y.iloc[washout_time:,])
-        mean_te, std_te = eval.mean_squared_error_with_std(test_y.iloc[washout_time:,], regr_test_y.iloc[washout_time:,])
+            mean_tr, std_tr = eval.mean_squared_error_with_std(train_y.iloc[washout_time:,], regr_train_y.iloc[washout_time:,])
+            mean_te, std_te = eval.mean_squared_error_with_std(test_y.iloc[washout_time:,], regr_test_y.iloc[washout_time:,])
 
-        overall_performance_tr_ts = mean_tr
-        overall_performance_tr_ts_std = std_tr
-        overall_performance_te_ts = mean_te
-        overall_performance_te_ts_std = std_te
+            overall_performance_tr_ts = mean_tr
+            overall_performance_tr_ts_std = std_tr
+            overall_performance_te_ts = mean_te
+            overall_performance_te_ts_std = std_te
+        else:
+            overall_performance_tr_ts = 0
+            overall_performance_tr_ts_std = 0
+            overall_performance_te_ts = 0
+            overall_performance_te_ts_std = 0
+
+        overall_performance_tr_res = performance_tr_res/repeats
+        overall_performance_tr_res_std = performance_tr_res_std/repeats
+        overall_performance_te_res = performance_te_res/repeats
+        overall_performance_te_res_std = performance_te_res_std/repeats
+        overall_performance_tr_rnn = performance_tr_rnn/repeats
+        overall_performance_tr_rnn_std = performance_tr_rnn_std/repeats
+        overall_performance_te_rnn = performance_te_rnn/repeats
+        overall_performance_te_rnn_std = performance_te_rnn_std/repeats
+
+        scores_with_sd = [(overall_performance_tr_res, overall_performance_tr_res_std, overall_performance_te_res, overall_performance_te_res_std),
+                        (overall_performance_tr_rnn, overall_performance_tr_rnn_std, overall_performance_te_rnn, overall_performance_te_rnn_std),
+                        (overall_performance_tr_ts, overall_performance_tr_ts_std, overall_performance_te_ts, overall_performance_te_ts_std)]
+        util.print_table_row_performances_regression(feature_names[i], len(selected_train_X.index), len(selected_test_X.index), scores_with_sd)
+        scores_over_all_algs.append(scores_with_sd)
+
+    if FLAGS.features == 'all':
+        feature_subset_names = feature_names
     else:
-        overall_performance_tr_ts = 0
-        overall_performance_tr_ts_std = 0
-        overall_performance_te_ts = 0
-        overall_performance_te_ts_std = 0
-
-    overall_performance_tr_res = performance_tr_res/repeats
-    overall_performance_tr_res_std = performance_tr_res_std/repeats
-    overall_performance_te_res = performance_te_res/repeats
-    overall_performance_te_res_std = performance_te_res_std/repeats
-    overall_performance_tr_rnn = performance_tr_rnn/repeats
-    overall_performance_tr_rnn_std = performance_tr_rnn_std/repeats
-    overall_performance_te_rnn = performance_te_rnn/repeats
-    overall_performance_te_rnn_std = performance_te_rnn_std/repeats
-
-    scores_with_sd = [(overall_performance_tr_res, overall_performance_tr_res_std, overall_performance_te_res, overall_performance_te_res_std),
-                    (overall_performance_tr_rnn, overall_performance_tr_rnn_std, overall_performance_te_rnn, overall_performance_te_rnn_std),
-                    (overall_performance_tr_ts, overall_performance_tr_ts_std, overall_performance_te_ts, overall_performance_te_ts_std)]
-    util.print_table_row_performances_regression(feature_names[i], len(selected_train_X.index), len(selected_test_X.index), scores_with_sd)
-    scores_over_all_algs.append(scores_with_sd)
-
-    DataViz.plot_performances_regression(['Reservoir', 'RNN', 'Time series'], [feature_names[i]], scores_over_all_algs)
+        feature_subset_names = [feature_names[i]]
+    
+    DataViz.plot_performances_regression(['Reservoir', 'RNN', 'Time series'], feature_subset_names, scores_over_all_algs)
 
     regr_train_y, regr_test_y = learner.reservoir_computing(train_X[features_after_chapter_5], train_y, test_X[features_after_chapter_5], test_y, gridsearch=False)
     DataViz.plot_numerical_prediction_versus_real(train_X.index, train_y, regr_train_y['acc_phone_x'], test_X.index, test_y, regr_test_y['acc_phone_x'], 'accelerometer X (m/s^2)')
@@ -256,13 +254,14 @@ if __name__ == '__main__':
     # Command line arguments
     parser = argparse.ArgumentParser()
     parser.add_argument('--features', type=str, default='selected',
-                        help="Select what feature set to run: initial, ch3, ch4, ch5, or selected_features. \
+                        help="Select what feature set to run: initial, ch3, ch4, ch5, selected, or all. \
                         'initial' to use only the initial feature set without any preprocessing \
                         'ch3' to use the features generated up to chapter 3 \
                         'ch4' to use the features generated up to chapter 4 \
                         'ch3' to use the features generated up to chapter 5 \
-                        'selected' to use the final selected feature set",
-                        choices=['selected', 'initial', 'ch3', 'ch4', 'ch5'])
+                        'selected' to use the final selected feature set \
+                        'all' to combine all of the above and compare them",
+                        choices=feature_choices + ['all'])
 
     FLAGS, unparsed = parser.parse_known_args()
 
